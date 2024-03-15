@@ -15,9 +15,10 @@ class Order(models.Model):
     
 class Learning(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # module = models.ForeignKey(Module, on_delete=models.CASCADE)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-    course_completed = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    # course_completed = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     chapter_completed = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -134,15 +134,27 @@ class LearningRoomView(APIView):
 
 class LearningView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = LearningSerializer
+    # queryset = Learning.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        courseId = kwargs.get('courseId')
+
+    # def get(self, request, *args, **kwargs):
+    #     chapterId = kwargs.get('chapterId')
         
-        try:
-            learning = Learning.objects.filter(id=courseId)
-        except Course.DoesNotExist:
-            return Response({'error': 'Learning progress not found'}, status=status.HTTP_404_NOT_FOUND)
-        print(learning,'++++++++++Learning===========')
-        serializer = LearningSerializer(learning, many=True, context={'request':request})
+    #     try:
+    #         learning = Learning.objects.filter(chapter=chapterId)
+    #     except Course.DoesNotExist:
+    #         return Response({'error': 'Learning progress not found'}, status=status.HTTP_404_NOT_FOUND)
+    #     print(learning,'++++++++++Learning===========')
+    #     serializer = LearningSerializer(learning, many=True, context={'request':request})
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        print('post worked')
+        request.data['user'] = request.user.id
+        serializer = LearningSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        
